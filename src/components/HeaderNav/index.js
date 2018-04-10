@@ -44,7 +44,7 @@ function Header({ dispatch }) {
       >
         <div className={styles.user}>
           <Icon type="user" />
-          <span>应开翔</span>
+          <span>ajie</span>
         </div>
       </Popover>
     </div>

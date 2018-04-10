@@ -6,10 +6,10 @@
  */
 
 export default [{
-  id: 'components',
+  id: 'ad',
   pid: '',
-  title: '组件列表',
-  icon: 'appstore-o',
-  route: '',
+  title: '广告业务',
+  icon: 'shop',
+  route: '/advertising',
   type: 0,
 }];

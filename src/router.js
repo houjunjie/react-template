@@ -1,5 +1,5 @@
 import React from 'react';
-import { routerRedux, Route, Switch } from 'dva/router';
+import { routerRedux, Route, Switch, Redirect } from 'dva/router';
 import dynamic from 'dva/dynamic';
 import App from './routes/App';
 
@@ -10,8 +10,9 @@ const { ConnectedRouter } = routerRedux;
  * 请不要配置model属性会导致报错
  */
 const routes = [{
-  path: '/',
-  component: () => import('./routes/login/'),
+  path: '/advertising',
+  models: () => [import('./models/advertising')],
+  component: () => import('./routes/Advertising/')
 }, {
   path: '/login',
   models: () => [import('./models/login')],
@@ -29,6 +30,7 @@ function RouterConfig({ history, app }) {
   return (
     <ConnectedRouter history={history}>
       <App>
+        <Route exact path="/" render={() => (<Redirect to="/advertising" />)} />
         <Switch>
           { routes.map(({ path, ...dynamics }, index) => {
             return (

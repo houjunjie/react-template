@@ -2,6 +2,7 @@ import { cloneDeep } from 'lodash';
 import jwt from 'jsrsasign';
 import permission from '../config/permission';
 
+
 // 数组转树
 export function arrayToTree(arr) {
   const current = cloneDeep(arr);
@@ -88,6 +89,7 @@ const getLocalStorage = function (key) {
   let dataObjDatatoJson = JSON.parse(dataObj.data)
   return dataObjDatatoJson
 }
+
 
 export {
   tokenVerfy,

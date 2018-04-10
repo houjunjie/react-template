@@ -49,14 +49,17 @@ const {
 //   })
 // }, 30000);
 
-function App({ children, dispatch, collapsed, breadcrumb, location, loading }) {
+function App({ children, dispatch, app, location, loading }) {
   const { pathname } = location
+  const { breadcrumb, collapsed } = app
+  console.log(pathname, openPages, 2222)
   if (openPages && openPages.includes(pathname)) {
     return (<div>
       {/* <Loader fullScreen spinning={loading.effects['app/query']} /> */}
       {children}
     </div>)
   }
+  console.log('breadcrumb', breadcrumb)
   return (
     <LocaleProvider locale={zhCN}>
       <Layout className={styles.layout}>

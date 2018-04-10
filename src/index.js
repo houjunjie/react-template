@@ -13,7 +13,7 @@ app.use(createLoading());
 
 // 3. Model
 app.model(require('./models/app').default);
-// app.model(require('./models/components/imageViewer').default);
+app.model(require('./models/components/rangepicker').default);
 // app.model(require('./models/components/detailPanel').default);
 
 // 4. Router
