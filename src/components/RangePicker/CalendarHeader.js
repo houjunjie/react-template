@@ -3,14 +3,37 @@ import moment from 'moment'
 import { connect } from 'dva'
 import style from './index.less'
 const CalendarHeader = ({
-  rangepicker
+  rangepicker,
+  dispatch
 }) => {
-  const { year, month } = rangepicker
+  let { year, month } = rangepicker
   const handleLeftClick = () => {
-
+    let newMonth = month - 1;
+    if (newMonth < 1) {
+      year--;
+      newMonth = 12;
+    }
+    dispatch({
+      type: 'rangepicker/updataState',
+      payload: {
+        month: newMonth,
+        year
+      }
+    })
   }
   const handleRightClick = () => {
-
+    let newMonth = month + 1;
+    if (newMonth > 12) {
+      year ++;
+      newMonth = 1;
+    }
+    dispatch({
+      type: 'rangepicker/updataState',
+      payload: {
+        month: newMonth,
+        year
+      }
+    })
   }
   console.log(moment().format('M'), 32)
   return (
