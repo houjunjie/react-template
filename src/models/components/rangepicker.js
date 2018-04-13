@@ -1,11 +1,16 @@
 
 import moment from 'moment'
-
+const year = Number(moment().format("YYYY")),
+      month = Number(moment().format("M")),
+      day = Number(moment().format("D"));
 export default {
   namespace: 'rangepicker',
   state: {
-    year: moment().format("YYYY"),
-    month: moment().format("M"),
+    year: year,
+    month: month,
+    curYear: year,
+    curMonth: month,
+    curDay: day
   },
   subscriptions: {
 

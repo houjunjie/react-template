@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "babel-plugin-dva-hmr": "^0.3.2",
+    "classnames": "^2.2.5",
     "cz-conventional-changelog": "^2.1.0",
     "eslint": "^4.14.0",
     "eslint-config-umi": "^0.1.1",
@@ -36,6 +37,7 @@
     "husky": "^0.12.0",
     "moment": "^2.22.0",
     "path-to-regexp": "^2.2.0",
+    "prop-types": "^15.6.1",
     "redbox-react": "^1.4.3",
     "roadhog": "^2.0.0"
   },

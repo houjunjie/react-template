@@ -2,9 +2,7 @@ import React, { Fragment } from 'react';
 import CalendarHeader from './CalendarHeader'
 import CalendarBody from './CalendarBody'
 
-const RangePicker = ({
-
-}) => {
+const RangePicker = () => {
   return (
     <Fragment>
       <CalendarHeader />

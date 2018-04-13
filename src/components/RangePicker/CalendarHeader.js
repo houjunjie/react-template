@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import moment from 'moment'
 import { connect } from 'dva'
 import style from './index.less'
@@ -6,6 +7,7 @@ const CalendarHeader = ({
   rangepicker,
   dispatch
 }) => {
+
   let { year, month } = rangepicker
   const handleLeftClick = () => {
     let newMonth = month - 1;
@@ -44,6 +46,10 @@ const CalendarHeader = ({
       <p className={style.triangleRight} onClick={handleRightClick}> </p>
     </div>
   )
+}
+CalendarHeader.propTypes= {
+  rangepicker: PropTypes.object,
+  dispatch: PropTypes.func
 }
 
 export default connect(({ rangepicker }) => ({ rangepicker }))(CalendarHeader)

@@ -51,7 +51,7 @@ const {
 
 function App({ children, dispatch, app, location, loading }) {
   const { pathname } = location
-  const { breadcrumb, collapsed } = app
+  const { breadcrumb } = app
   console.log(pathname, openPages, 2222)
   if (openPages && openPages.includes(pathname)) {
     return (<div>

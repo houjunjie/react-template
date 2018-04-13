@@ -36,29 +36,54 @@ li {
    cursor: pointer;
 }
 
-.CalendarDay li{
-  list-style: none;
-  float: left;
-  width:14%;
-  color: #1890ff;
-  width: 13%;
-  height: 59px;
+// .CalendarDay li{
+//   list-style: none;
+//   float: left;
+//   width:14%;
+//   // color: #1890ff;
+//   width: 13%;
+//   height: 59px;
+//   text-align: center;
+//   vertical-align: bottom;
+//   line-height: 59px;
+// }
+// .CalendarDay li:hover{
+//  background-color: #e6f7ff;
+//  cursor: pointer;
+// }
+// .weekday{
+//   height: 19px;
+//   margin-left: 17px;
+//   li{
+//     list-style: none;
+//     float: left;
+//     width:14%;
+//     color: #1890ff;
+//   }
+// }
+
+.calendarTable{
+  max-width: 100%;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: transparent;
   text-align: center;
-  vertical-align: bottom;
-  line-height: 59px;
-  color: #94898F;
-}
-.CalendarDay li:hover{
- background-color: #e6f7ff;
- cursor: pointer;
-}
-.weekday{
-  height: 19px;
-  margin-left: 17px;
-  li{
-    list-style: none;
-    float: left;
-    width:14%;
-    color: #1890ff;
+  th, td {
+    padding: 10px;
+    border: 0;
   }
+  td{
+    &:hover{
+      background-color: #e6f7ff;
+      cursor: pointer;
+    }
+  }
+}
+
+.current{
+  background: #2db7f5;
+  color: #fff;
+}
+.prevMonth, .nextMonth {
+  color: #ccc;
 }
