@@ -10,7 +10,9 @@ export default {
     month: month,
     curYear: year,
     curMonth: month,
-    curDay: day
+    curDay: day,
+    startDate: null,
+    endDate: null
   },
   subscriptions: {
 

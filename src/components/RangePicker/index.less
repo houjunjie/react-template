@@ -73,16 +73,29 @@ li {
     border: 0;
   }
   td{
+    // cursor: pointer;
     &:hover{
-      background-color: #e6f7ff;
+      background: #e6f7ff;
       cursor: pointer;
     }
-  }
-}
 
-.current{
-  background: #2db7f5;
-  color: #fff;
+    // &.current{
+    //   background: #2db7f5;
+    //   color: #fff;
+    // }
+  }
+  .inRange{
+    background-color: #e6f7ff;
+  }
+  .today {
+    border-color: #1890ff;
+    font-weight: 700;
+    color: #1890ff;
+  }
+  .selected {
+      background: #2db7f5;
+      color: #fff;
+  }
 }
 .prevMonth, .nextMonth {
   color: #ccc;

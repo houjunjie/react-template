@@ -9,21 +9,27 @@ const CalendarBody = ({
   rangepicker,
   dispatch
 }) => {
-  const { year, month } = rangepicker
+  const { year, month, curDay, startDate, endDate } = rangepicker
   const m = moment(`${year}-${month}`, 'YYYY-MM'),
+        daysCount = m.daysInMonth(), // 当前月的天数
         lastDay = moment(`${year}-${month}`, 'YYYY-MM').subtract(1, 'days'),
-        nextDay = moment(`${year}-${month}`, 'YYYY-MM').add(1, 'days')
-  let daysCount = m.daysInMonth(), // 当前月的天数
-      lastDays = lastDay.daysInMonth(), // 上一个月的天数
-      firstDayWeek = m.day(); // 当前月第一天是周几
+        nextMonthDay = moment(`${year}-${month}-${daysCount}`, 'YYYY-MM-DD').add(1, 'days'),
+        lastDays = lastDay.daysInMonth(), // 上一个月的天数
+        firstDayWeek = m.day(); // 当前月第一天是周几
   let monthData = [];
   let rowsInMonth = [];
+  console.log(nextMonthDay.format('YYYY-MM-DD'))
   //补足上一个月
   for (; firstDayWeek > 0; firstDayWeek--) {
     let day = lastDays--;
     let date = `${lastDay.format('YYYY')}-${lastDay.format('MM')}-${day}`
+    console.log(date, startDate, date === startDate,'startDate')
     monthData.push({
-      value: day,
+      classname: classnames({
+        'last-month-day': true,
+        [style.selected]: date === startDate
+      }),
+      day: day,
       date
     })
     // monthData.unshift(lastDays--)
@@ -32,17 +38,27 @@ const CalendarBody = ({
   for (let i = 0; i < daysCount;) {
     let day = ++i;
     let date = `${m.format('YYYY')}-${m.format('MM')}-${day}`
+    console.log(day, curDay, 'dddddd');
+
     monthData.push({
-      value: day,
+      classname: classnames({
+        [style.today]: curDay === day,
+        [style.selected]: date === startDate
+      }),
+      day: day,
       date
     })
   }
   //补足下一个月
   for (let i = 42 - monthData.length, j = 0; j < i;) {
     let day = ++j;
-    let date = `${nextDay.format('YYYY')}-${nextDay.format('MM')}-${day}`
+    let date = `${nextMonthDay.format('YYYY')}-${nextMonthDay.format('MM')}-${day < 10 ? '0' + day : day}`
     monthData.push({
-      value: day,
+      classname: classnames({
+        'last-month-day': true,
+        [style.selected]: date === startDate
+      }),
+      day: day,
       date
     })
     // monthData.push(++j)
@@ -53,6 +69,21 @@ const CalendarBody = ({
       rowsInMonth.push(monthData.slice(index, index + 7))
     }
   })
+
+  const handleMouseEnter = (date) => {
+    console.log(date, "date");
+  }
+  const handleClick = (date) => {
+    console.log(date, 'click');
+    if(!startDate) {
+      dispatch({
+        type: 'rangepicker/updataState',
+        payload: {
+          startDate: date
+        }
+      })
+    }
+  }
 
   return (
     <div>
@@ -88,13 +119,16 @@ const CalendarBody = ({
             return (
               <tr key={rowIndex}>
                 {
-                  row.map((day, i)=> {
+                  row.map((item, i)=> {
                     return (
                       <td
-                        title={`${year}-${month}-${day}`}
+                        className={item.classname}
+                        title={item.date}
                         key={i}
+                        onMouseEnter={() => handleMouseEnter(item.date)}
+                        onClick={() => handleClick(item.date)}
                       >
-                        {day}
+                        <div>{item.day}</div>
                       </td>
                     )
                   })
