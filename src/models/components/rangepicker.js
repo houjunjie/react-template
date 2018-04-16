@@ -2,7 +2,7 @@
 import moment from 'moment'
 const year = Number(moment().format("YYYY")),
       month = Number(moment().format("M")),
-      day = Number(moment().format("D"));
+      day = moment().format("YYYY-MM-DD");
 export default {
   namespace: 'rangepicker',
   state: {
@@ -12,7 +12,8 @@ export default {
     curMonth: month,
     curDay: day,
     startDate: null,
-    endDate: null
+    endDate: null,
+    off: false, // 用来判断是否已经选了结束时间
   },
   subscriptions: {
 

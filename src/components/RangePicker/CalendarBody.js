@@ -9,25 +9,29 @@ const CalendarBody = ({
   rangepicker,
   dispatch
 }) => {
-  const { year, month, curDay, startDate, endDate } = rangepicker
+  const { year, month, curDay, startDate, endDate, off } = rangepicker
   const m = moment(`${year}-${month}`, 'YYYY-MM'),
         daysCount = m.daysInMonth(), // 当前月的天数
         lastDay = moment(`${year}-${month}`, 'YYYY-MM').subtract(1, 'days'),
-        nextMonthDay = moment(`${year}-${month}-${daysCount}`, 'YYYY-MM-DD').add(1, 'days'),
-        lastDays = lastDay.daysInMonth(), // 上一个月的天数
-        firstDayWeek = m.day(); // 当前月第一天是周几
+        nextMonthDay = moment(`${year}-${month}-${daysCount}`, 'YYYY-MM-DD').add(1, 'days');
+
+  let lastDays = lastDay.daysInMonth(), // 上一个月的天数
+      firstDayWeek = m.day(); // 当前月第一天是周几
   let monthData = [];
   let rowsInMonth = [];
   console.log(nextMonthDay.format('YYYY-MM-DD'))
   //补足上一个月
   for (; firstDayWeek > 0; firstDayWeek--) {
     let day = lastDays--;
-    let date = `${lastDay.format('YYYY')}-${lastDay.format('MM')}-${day}`
+    let date = `${lastDay.format('YYYY')}-${lastDay.format('MM')}-${day < 10 ? '0' + day : day}`
     console.log(date, startDate, date === startDate,'startDate')
     monthData.push({
       classname: classnames({
         'last-month-day': true,
-        [style.selected]: date === startDate
+        [style.today]: curDay === date,
+        [style.inRange]: moment(date).unix() >  moment(startDate).unix() && moment(date).unix() <  moment(endDate).unix(),
+        [style.selectedStart]: date === startDate,
+        [style.selectedEnd]: date === endDate
       }),
       day: day,
       date
@@ -37,13 +41,13 @@ const CalendarBody = ({
   //加入当前月
   for (let i = 0; i < daysCount;) {
     let day = ++i;
-    let date = `${m.format('YYYY')}-${m.format('MM')}-${day}`
-    console.log(day, curDay, 'dddddd');
-
+    let date = `${m.format('YYYY')}-${m.format('MM')}-${day < 10 ? '0' + day : day}`
     monthData.push({
       classname: classnames({
-        [style.today]: curDay === day,
-        [style.selected]: date === startDate
+        [style.today]: curDay === date,
+        [style.inRange]: moment(date).unix() >  moment(startDate).unix() && moment(date).unix() <  moment(endDate).unix(),
+        [style.selectedStart]: date === startDate,
+        [style.selectedEnd]: date === endDate
       }),
       day: day,
       date
@@ -56,7 +60,10 @@ const CalendarBody = ({
     monthData.push({
       classname: classnames({
         'last-month-day': true,
-        [style.selected]: date === startDate
+        [style.today]: curDay === date,
+        [style.inRange]: moment(date).unix() >  moment(startDate).unix() && moment(date).unix() <  moment(endDate).unix(),
+        [style.selectedStart]: date === startDate,
+        [style.selectedEnd]: date === endDate
       }),
       day: day,
       date
@@ -71,18 +78,50 @@ const CalendarBody = ({
   })
 
   const handleMouseEnter = (date) => {
-    console.log(date, "date");
+    // console.log(date, "date");
+    if(!startDate || off) {
+      return
+    }
+    const temp = isEndDateMax(startDate, date);
+    dispatch({
+      type: 'rangepicker/updataState',
+      payload: {
+        endDate: temp ? date : null
+      }
+    })
+    // payload = {
+    //   startDate: temp ? startDate : date,
+    //   endDate: temp ? date : startDate
+    // }
+    // console.log(payload, 'payload')
+  }
+  // 判断后一个日期是否比前一个日期大
+  const isEndDateMax = (start, end) => {
+    let unix1 = moment(start).unix(),
+        unix2 = moment(end).unix();
+    return unix1 <= unix2
   }
   const handleClick = (date) => {
     console.log(date, 'click');
+    let payload = {}
     if(!startDate) {
-      dispatch({
-        type: 'rangepicker/updataState',
-        payload: {
-          startDate: date
-        }
-      })
+      payload = {
+        startDate: date
+      }
+    } else {
+      console.log('ddddaaa')
+      const temp = isEndDateMax(startDate, date);
+      payload = {
+        startDate: temp ? startDate : date,
+        endDate: temp ? date : null,
+        off: temp ? true : false
+      }
+      console.log(payload, 'payload')
     }
+    dispatch({
+      type: 'rangepicker/updataState',
+      payload
+    })
   }
 
   return (
@@ -128,7 +167,7 @@ const CalendarBody = ({
                         onMouseEnter={() => handleMouseEnter(item.date)}
                         onClick={() => handleClick(item.date)}
                       >
-                        <div>{item.day}</div>
+                        <div className={style.calendarDate}>{item.day}</div>
                       </td>
                     )
                   })

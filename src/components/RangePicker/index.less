@@ -68,34 +68,67 @@ li {
   border-collapse: collapse;
   background-color: transparent;
   text-align: center;
-  th, td {
+  th{
     padding: 10px;
+  }
+  th, td {
     border: 0;
   }
   td{
     // cursor: pointer;
-    &:hover{
+    padding: 5px 0;
+    >div{
+
+    }
+    &:hover>div{
       background: #e6f7ff;
       cursor: pointer;
     }
-
-    // &.current{
-    //   background: #2db7f5;
-    //   color: #fff;
-    // }
   }
   .inRange{
-    background-color: #e6f7ff;
+    border-radius: 0;
+    position: relative;
+    &:before {
+      content: "";
+      display: block;
+      background: #eaf8fe;
+      border-radius: 0;
+      border: 0;
+      position: absolute;
+      top: 5px;
+      bottom: 5px;
+      left: 0;
+      right: 0;
+    }
+    & > div{
+      position: relative;
+      z-index: 1;
+    }
   }
-  .today {
+  .today > div {
     border-color: #1890ff;
     font-weight: 700;
     color: #1890ff;
   }
-  .selected {
+  td.selectedStart, td.selectedEnd {
+    &>div{
       background: #2db7f5;
       color: #fff;
+    }
   }
+}
+.calendarDate{
+  display: block;
+  margin: 0 auto;
+  width: 85%;
+  color: #666;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  padding: 0;
+  line-height: 24px;
+  background: transparent;
+  text-align: center;
+  transition: background .3s ease;
 }
 .prevMonth, .nextMonth {
   color: #ccc;
