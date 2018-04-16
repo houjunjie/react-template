@@ -104,19 +104,18 @@ const CalendarBody = ({
   const handleClick = (date) => {
     console.log(date, 'click');
     let payload = {}
-    if(!startDate) {
+    if(!startDate || (endDate && off) ) {
       payload = {
-        startDate: date
+        startDate: date,
+        endDate: null
       }
     } else {
-      console.log('ddddaaa')
       const temp = isEndDateMax(startDate, date);
       payload = {
         startDate: temp ? startDate : date,
-        endDate: temp ? date : null,
+        endDate: temp ? date : startDate,
         off: temp ? true : false
       }
-      console.log(payload, 'payload')
     }
     dispatch({
       type: 'rangepicker/updataState',
