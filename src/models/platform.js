@@ -11,7 +11,6 @@ export default {
   },
   subscriptions: {
     setup ({ dispatch, history }) {
-      console.log('333334444')
       history.listen(({ pathname }) => {
         if (pathname === '/platform') {
           dispatch({ type: 'query' })

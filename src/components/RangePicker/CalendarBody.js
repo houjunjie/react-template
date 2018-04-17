@@ -7,7 +7,8 @@ import { Row, Col } from 'antd'
 import style from './index.less'
 const CalendarBody = ({
   rangepicker,
-  dispatch
+  dispatch,
+  handleSelect
 }) => {
   const { year, month, curDay, startDate, endDate, off } = rangepicker
   const m = moment(`${year}-${month}`, 'YYYY-MM'),
@@ -19,12 +20,10 @@ const CalendarBody = ({
       firstDayWeek = m.day(); // 当前月第一天是周几
   let monthData = [];
   let rowsInMonth = [];
-  console.log(nextMonthDay.format('YYYY-MM-DD'))
   //补足上一个月
   for (; firstDayWeek > 0; firstDayWeek--) {
     let day = lastDays--;
     let date = `${lastDay.format('YYYY')}-${lastDay.format('MM')}-${day < 10 ? '0' + day : day}`
-    console.log(date, startDate, date === startDate,'startDate')
     monthData.push({
       classname: classnames({
         'last-month-day': true,
@@ -104,6 +103,7 @@ const CalendarBody = ({
   const handleClick = (date) => {
     console.log(date, 'click');
     let payload = {}
+    handleSelect()
     if(!startDate || (endDate && off) ) {
       payload = {
         startDate: date,

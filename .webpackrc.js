@@ -2,7 +2,16 @@ export default {
   entry: "src/index.js",
   publicPath: "/",
   extraBabelPlugins: [
-    ["import", { "libraryName": "antd", "style": true }]
+    ["import", { "libraryName": "antd", "style": true }],
+    ["module-resolver", {
+      "alias": {
+        "routes": `${__dirname}/src/routes`,
+        "models": `${__dirname}/src/models`,
+        "services": `${__dirname}/src/services`,
+        "components": `${__dirname}/src/components`,
+        "utils": `${__dirname}/src/utils`
+      }
+    }]
   ],
   env: {
     "development": {
@@ -16,5 +25,9 @@ export default {
       "changeOrigin": true,
       // "pathRewrite": { "^/api/v1": "" }
     },
-  }
+  },
+  // dllPlugin: {
+  //   exclude: ["babel-runtime", "roadhog", "cross-env"],
+  //   include: ["dva/router", "dva/saga", "dva/fetch"]
+  // }
 }

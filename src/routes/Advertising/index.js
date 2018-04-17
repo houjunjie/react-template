@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Tabs } from 'antd';
-import RangePicker from '../../components/RangePicker'
+import ResourcesLock from './ResourcesLock'
 
 const { TabPane } = Tabs;
 
@@ -18,7 +18,7 @@ const Advertising = ({
         tabPosition="left"
       >
         <TabPane tab="资源锁定" key="1">
-          <RangePicker></RangePicker>
+          <ResourcesLock />
         </TabPane>
         <TabPane tab="广告主" key="2">广告主</TabPane>
         <TabPane tab="签约审核" key="3">签约审核</TabPane>
