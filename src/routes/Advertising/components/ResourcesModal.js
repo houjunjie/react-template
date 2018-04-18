@@ -1,7 +1,10 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Icon, Checkbox, Row, Col, InputNumber } from 'antd'
+import { connect } from 'dva'
+import { Form, Icon, Checkbox, Row, Col, InputNumber, Button } from 'antd'
 import _ from 'lodash'
+import classnames from 'classnames'
+import Implate from './Implate'
 
 import style from './ResourcesModal.less'
 
@@ -23,18 +26,19 @@ const plainOptions = [{
   name: '广告四'
 }];
 
-export default class ResourcesModai extends React.PureComponent {
+class ResourcesModal extends React.PureComponent {
   constructor(props) {
     super(props);
     const lists = _.map(plainOptions, 'value')
-
     this.state = {
       plainOptions: plainOptions,
       allLists: lists,
       checkedList: [],
       indeterminate: true,
       checkAll: false,
-      checkedObj: {}
+      checkedObj: {},
+      modalVisible: false,
+      next: false
     }
   }
   onCheckAllChange = (e) => {
@@ -82,14 +86,30 @@ export default class ResourcesModai extends React.PureComponent {
     item.total = e.target.value
     let newPlainOptions = Object.assign(plainOptions,item)
   }
+  setSongModalVisible = (visible) => {
+    console.log('modalVisible', visible)
+    this.setState({
+      modalVisible: visible
+    })
+  }
+  handleStep = (val) => {
+    this.setState({
+      next: val
+    })
+  }
   render () {
-    const { checkedList, plainOptions } = this.state;
-    const { closeModal } = this.props
-    return (
-      <Fragment>
-        <div className="textRight">
-          <Icon type="close" className={style.close} onClick={closeModal}/>
-        </div>
+    const { checkedList, plainOptions, modalVisible, next } = this.state;
+    const { closeModal, dispatch, loading, resourceslock } = this.props
+    console.log('loadingloading', loading)
+    const implateProp = {
+      dispatch,
+      loading,
+      resourceslock,
+      modalVisible,
+      setSongModalVisible: this.setSongModalVisible
+    }
+    const firstStep = () => (
+      <div className={style.inner}>
         <div className="margin-bottom10">
           <Checkbox
             indeterminate={this.state.indeterminate}
@@ -106,7 +126,7 @@ export default class ResourcesModai extends React.PureComponent {
                   <Checkbox value={item.value} className={style.checkbox}>
                     {item.name}
                     <div className={style.checkboxRight}>
-                      <InputNumber type="number" disabled={!item.isCheck} onBlur={(e) => this.setTotal(e, item)} size="small" style={{ width: 80 }} /> /10000
+                      <InputNumber disabled={!item.isCheck} onBlur={(e) => this.setTotal(e, item)} size="small" style={{ width: 80 }} /> /10000
                     </div>
                   </Checkbox>
                 </div>
@@ -114,7 +134,49 @@ export default class ResourcesModai extends React.PureComponent {
             })
           }
         </CheckboxGroup>
-      </Fragment>
+        {/* <Implate {...implateProp}></Implate> */}
+        <div className={style.total}>
+          合计
+          <span className="floatRight">10000</span>
+        </div>
+        <div className={style.bottom}>
+          <Button type="primary" onClick={() => this.handleStep(true)}>下一步</Button>
+        </div>
+      </div>
+    )
+    const lastStep = () => (
+      <div className={style.inner}>
+        <div className={style.top}>
+          <div>
+            广告形式一
+            <span className="floatRight">10000</span>
+          </div>
+          <div>
+            广告形式二
+            <span className="floatRight">10000</span>
+          </div>
+          <div className={style.total}>
+            合计
+            <span className="floatRight">10000</span>
+          </div>
+        </div>
+        <div className={style.bottom}>
+          <Button type="primary" onClick={() => this.handleStep(false)}>上一步</Button>
+          <Button type="primary" onClick={closeModal} className={style.submit}>提交</Button>
+        </div>
+      </div>
+    )
+    return (
+      <div className={style.modal}>
+        <div className="textRight">
+          <Icon type="close" className={style.close} onClick={closeModal}/>
+        </div>
+        {
+          !next ? firstStep() : lastStep()
+        }
+
+      </div>
     )
   }
 }
+export default connect(({ resourceslock, loading }) => ({ resourceslock, loading }))(ResourcesModal)

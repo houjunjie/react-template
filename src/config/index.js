@@ -13,5 +13,6 @@ module.exports = {
     songlists: `${APIV1}/songlists`,
     userService: `${APIV1}/user/user/:id/service`,
     getCityList: `${APIV1}/base/administrative-division`,
+    advertisers: `${APIV1}/advertisers`,
   },
 }

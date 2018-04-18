@@ -11,7 +11,7 @@ import ResourcesFrom from './components/ResourcesFrom'
 const FormItem = Form.Item
 class ResourcesLock extends React.PureComponent {
   static propTypes = {
-    advertising: PropTypes.object,
+    resourceslock: PropTypes.object,
     dispatch: PropTypes.func
   }
   constructor(props) {
@@ -32,14 +32,24 @@ class ResourcesLock extends React.PureComponent {
     })
   }
   closeModal = () => {
+
     this.setState({
       open: false,
-      leftSpan: 24,
-      rightSpan: 0
     })
+    setTimeout(() => {
+      this.setState({
+        leftSpan: 24,
+        rightSpan: 0
+      })
+    }, 700);
   }
   render () {
     const { leftSpan, rightSpan, open } = this.state
+    // const { dispatch, loading } = this.props
+    // const modalProp = {
+    //   dispatch,
+    //   loading
+    // }
     return (
       <Fragment>
         <Row>
@@ -62,4 +72,4 @@ class ResourcesLock extends React.PureComponent {
   }
 }
 
-export default connect(({ advertising }) => ({ advertising }))(ResourcesLock)
+export default connect(({ resourceslock }) => ({ resourceslock }))(ResourcesLock)

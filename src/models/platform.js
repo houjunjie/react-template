@@ -22,9 +22,9 @@ export default {
     * query ({
       payload,
     }, { call, put }) {
-      console.log(payload, 'payload')
+      // console.log(payload, 'payload')
       const userId = getLocalStorage('user_id')
-      console.log(userId, 'userId')
+      // console.log(userId, 'userId')
       // const userId = 12
       if (!userId) {
         yield put(routerRedux.push({
@@ -32,7 +32,7 @@ export default {
         }))
         return
       }
-      console.log('333')
+      // console.log('333')
       const data = yield call(getService, {
         user_id: userId,
       })

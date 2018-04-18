@@ -2,11 +2,27 @@ import request from 'utils/request';
 import config from '../config/index'
 
 const { api } = config
-const { getCityList } = api
+const { getCityList, songlists, advertisers } = api
 
 export function queryCity (data) {
   return request({
-    url: 'http://test.beidousat.com:8084/server/index.php?g=Web&c=Mock&o=simple&projectID=15&uri=/v4.0/base/administrative-division',
+    url: getCityList,
+    method: 'get',
+    data,
+  })
+}
+
+export function querySonglist (data) {
+  return request({
+    url: songlists,
+    method: 'get',
+    data,
+  })
+}
+
+export function queryAdvertisers (data) {
+  return request({
+    url: advertisers,
     method: 'get',
     data,
   })

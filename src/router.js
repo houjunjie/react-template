@@ -11,7 +11,9 @@ const { ConnectedRouter } = routerRedux;
  */
 const routes = [{
   path: '/advertising',
-  models: () => [import('./models/advertising')],
+  models: () => [
+    import('./models/advertising/resourceslock'),
+    import('./models/advertising/advertiser')],
   component: () => import('./routes/Advertising/')
 }, {
   path: '/login',
