@@ -6,10 +6,10 @@ const SongModalLists = ({
   modalProps,
   listProps
 }) => {
-  const modalOpts = {
-    ...modalProps,
-    width: '70%',
-  }
+  // const modalOpts = {
+  //   ...modalProps,
+  //   width: '70%',
+  // }
 
   return (
     <Modal {...modalProps}>

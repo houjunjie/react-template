@@ -3,7 +3,7 @@ import moment from 'moment'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
-import { Row, Col } from 'antd'
+// import { Row, Col } from 'antd'
 import style from './index.less'
 const CalendarBody = ({
   rangepicker,
@@ -24,14 +24,17 @@ const CalendarBody = ({
   for (; firstDayWeek > 0; firstDayWeek--) {
     let day = lastDays--;
     let date = `${lastDay.format('YYYY')}-${lastDay.format('MM')}-${day < 10 ? '0' + day : day}`
+    const disabled = moment(curDay).unix() > moment(date).unix()
     monthData.push({
       classname: classnames({
-        'last-month-day': true,
+        [style.lastMonthDay]: true,
+        [style.disabled]: disabled,
         [style.today]: curDay === date,
         [style.inRange]: moment(date).unix() >  moment(startDate).unix() && moment(date).unix() <  moment(endDate).unix(),
         [style.selectedStart]: date === startDate,
         [style.selectedEnd]: date === endDate
       }),
+      disabled: disabled,
       day: day,
       date
     })
@@ -41,13 +44,16 @@ const CalendarBody = ({
   for (let i = 0; i < daysCount;) {
     let day = ++i;
     let date = `${m.format('YYYY')}-${m.format('MM')}-${day < 10 ? '0' + day : day}`
+    const disabled = moment(curDay).unix() > moment(date).unix()
     monthData.push({
       classname: classnames({
         [style.today]: curDay === date,
+        [style.disabled]: disabled,
         [style.inRange]: moment(date).unix() >  moment(startDate).unix() && moment(date).unix() <  moment(endDate).unix(),
         [style.selectedStart]: date === startDate,
         [style.selectedEnd]: date === endDate
       }),
+      disabled: disabled,
       day: day,
       date
     })
@@ -55,15 +61,18 @@ const CalendarBody = ({
   //补足下一个月
   for (let i = 42 - monthData.length, j = 0; j < i;) {
     let day = ++j;
-    let date = `${nextMonthDay.format('YYYY')}-${nextMonthDay.format('MM')}-${day < 10 ? '0' + day : day}`
+    let date = `${nextMonthDay.format('YYYY')}-${nextMonthDay.format('MM')}-${day < 10 ? '0' + day : day}`;
+    const disabled = moment(curDay).unix() > moment(date).unix()
     monthData.push({
       classname: classnames({
-        'last-month-day': true,
+        [style.nextMonthDay]: true,
         [style.today]: curDay === date,
+        [style.disabled]: disabled ,
         [style.inRange]: moment(date).unix() >  moment(startDate).unix() && moment(date).unix() <  moment(endDate).unix(),
         [style.selectedStart]: date === startDate,
         [style.selectedEnd]: date === endDate
       }),
+      disabled: disabled,
       day: day,
       date
     })
@@ -76,7 +85,8 @@ const CalendarBody = ({
     }
   })
 
-  const handleMouseEnter = (date) => {
+  const handleMouseEnter = (date, disabled) => {
+    if(disabled) return
     // console.log(date, "date");
     if(!startDate || off) {
       return
@@ -100,8 +110,8 @@ const CalendarBody = ({
         unix2 = moment(end).unix();
     return unix1 <= unix2
   }
-  const handleClick = (date) => {
-    console.log(date, 'click');
+  const handleClick = (date, disabled) => {
+    if(disabled) return
     let payload = {}
     handleSelect()
     if(!startDate || (endDate && off) ) {
@@ -163,8 +173,8 @@ const CalendarBody = ({
                         className={item.classname}
                         title={item.date}
                         key={i}
-                        onMouseEnter={() => handleMouseEnter(item.date)}
-                        onClick={() => handleClick(item.date)}
+                        onMouseEnter={() => handleMouseEnter(item.date, item.disabled)}
+                        onClick={() => handleClick(item.date, item.disabled)}
                       >
                         <div className={style.calendarDate}>{item.day}</div>
                       </td>

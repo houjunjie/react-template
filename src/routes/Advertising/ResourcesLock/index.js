@@ -4,8 +4,8 @@ import { connect } from 'dva'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import RangePicker from 'components/RangePicker'
-import ResourcesModal from './components/ResourcesModal'
-import ResourcesFrom from './components/ResourcesFrom'
+import ResourcesModal from './ResourcesModal'
+import ResourcesFrom from './ResourcesFrom'
 
 
 const FormItem = Form.Item

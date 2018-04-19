@@ -40,8 +40,7 @@ const CalendarHeader = ({
   console.log(moment().format('M'), 32)
   return (
     <div className={style.headerborder}>
-      <p>{year}</p>
-      <p>{month}</p>
+      <p style={{lineHeight: '60px'}}>{year}-{month}</p>
       <p className={style.triangleLeft} onClick={handleLeftClick}> </p>
       <p className={style.triangleRight} onClick={handleRightClick}> </p>
     </div>

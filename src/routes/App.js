@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter, Link } from 'dva/router';
+import PropTypes from 'prop-types'
 import {
   Layout,
   BackTop,
@@ -11,12 +12,8 @@ import { connect } from 'dva';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import styles from './App.less';
 
-// import ImageViewer from '../components/ImageViewer/';
-// import DetailPanel from '../components/DetailPanel/';
-// import Player from '../components/Player/';
 import SiderMenu from '../components/SiderMenu/';
 import HeaderNav from '../components/HeaderNav/';
-// import Loader from '../components/Loader/Loader';
 import { openPages } from '../config';
 
 const {
@@ -26,36 +23,13 @@ const {
   Footer,
 } = Layout;
 
-// 模拟消息
-// setInterval(() => {
-//   notification.open({
-//     message: '后台消息通知',
-//     description: (
-//       <div>
-//         <p className={styles.notification}>您如果有任何的意见都可以通过以下方式联系我。</p>
-//         <p className={styles.notification}>邮箱：
-//           <a href="mailto:rubykaikai@gmail.com">rubykaikai@gmail.com</a>。
-//         </p>
-//         <p className={styles.notification}>GitHub：
-//           <a
-//             href="https://github.com/Yingkaixiang"
-//             target="_blank"
-//             rel="noopener noreferrer"
-//           >https://github.com/Yingkaixiang</a>。
-//         </p>
-//       </div>
-//     ),
-//     placement: 'bottomRight',
-//   })
-// }, 30000);
-
 function App({ children, dispatch, app, location, loading }) {
+  // console.log('childrenchildrenchildrenchildren', children)
   const { pathname } = location
   const { breadcrumb } = app
   // console.log(pathname, openPages, 2222)
   if (openPages && openPages.includes(pathname)) {
     return (<div>
-      {/* <Loader fullScreen spinning={loading.effects['app/query']} /> */}
       {children}
     </div>)
   }
@@ -102,7 +76,13 @@ function App({ children, dispatch, app, location, loading }) {
   );
 }
 
-App.propTypes = {};
+App.propTypes = {
+  children: PropTypes.element.isRequired,
+  location: PropTypes.object,
+  dispatch: PropTypes.func,
+  app: PropTypes.object,
+  loading: PropTypes.object,
+};
 
 // export default withRouter(connect(data => data.app)(App));
 export default withRouter(connect(({ app, loading }) => ({ app, loading }))(App))

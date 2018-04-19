@@ -32,8 +32,8 @@ function RouterConfig({ history, app }) {
   return (
     <ConnectedRouter history={history}>
       <App>
-        <Route exact path="/" render={() => (<Redirect to="/advertising" />)} />
         <Switch>
+          <Route exact path="/" render={() => (<Redirect to="/advertising" />)} />
           { routes.map(({ path, ...dynamics }, index) => {
             return (
               <Route

@@ -7,6 +7,24 @@ console.log('namespace', common)
 export default modelExtend(common.pageModel, {
   namespace: 'advertiser',
   state: {
+    firstStep: true,
+    lastStepData: {
+      list: [],
+      pagination: {
+        showSizeChanger: true,
+        showQuickJumper: true,
+        showTotal: total => `共 ${total} 条数据`,
+        current: 1,
+        total: 0,
+        pageSize: 10,
+      },
+      selectedRowKeys:[],
+      previewVisible: false,
+      previewImage: '',
+      fileList: [],
+      centerVisible: false,
+      centerList: []
+    }
   },
   effects: {
     * query ({ payload }, { call, put }) {
@@ -34,6 +52,17 @@ export default modelExtend(common.pageModel, {
       return {
         ...state,
         ...payload
+      }
+    },
+    updateLastStepState(state, {payload}) {
+      const lastStepData = state.lastStepData
+      console.log('payload', payload)
+      return {
+        ...state,
+        lastStepData: {
+          ...lastStepData,
+          ...payload
+        }
       }
     }
   }

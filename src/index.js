@@ -1,7 +1,8 @@
 import dva from 'dva';
 import { message } from 'antd'
 import createLoading from 'dva-loading';
-import createHistory from 'history/createBrowserHistory';
+// import createHistory from 'history/createBrowserHistory';
+import { browserHistory } from 'dva/router'
 import './index.less';
 import 'animate.css'
 import 'babel-polyfill'
@@ -10,7 +11,7 @@ const app = dva({
   ...createLoading({
     effects: true,
   }),
-  history: createHistory(),
+  history: browserHistory,
   onError (error) {
     message.error(error.message)
   },

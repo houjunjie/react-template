@@ -2,15 +2,15 @@
 // import { tokenVerfy, setLocalStorage } from '../utils'
 import modelExtend from 'dva-model-extend'
 import common from '../common'
-import { queryCity, querySonglist } from 'services/advertising'
+import { queryCity, queryStores } from 'services/advertising'
 export default modelExtend(common.pageModel, {
   namespace: 'resourceslock',
   state: {
     province: [],
     city: [],
     area: [],
-    selectedRowKeys: [],
-    list: [],
+    // selectedRowKeys: [],
+    // list: [],
   },
   subscriptions: {
     setup ({ dispatch, history }) {
@@ -65,8 +65,9 @@ export default modelExtend(common.pageModel, {
         throw data
       }
     },
-    * querySonglist ({ payload }, { call, put }) {
-      const data = yield call(querySonglist, payload)
+    * queryStorelist ({ payload }, { call, put }) {
+      console.log('payloadpayload', payload)
+      const data = yield call(queryStores, payload)
       if (data.success) {
         // const { administrative_division } = data.data
         // yield put({

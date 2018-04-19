@@ -14,5 +14,6 @@ module.exports = {
     userService: `${APIV1}/user/user/:id/service`,
     getCityList: `${APIV1}/base/administrative-division`,
     advertisers: `${APIV1}/advertisers`,
+    stores: `${APIV1}/ad/stores`,
   },
 }

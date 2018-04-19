@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Tabs } from 'antd';
 import ResourcesLock from './ResourcesLock'
-import Advertoser from './Advertiser'
+import Advertoser from './Advertiser/'
 
 const { TabPane } = Tabs;
 

@@ -37,6 +37,7 @@ export default {
         })
       }
     }
+    console.log((page - 1) * pageSize, page * pageSize);
     res.json({
       data: newData.slice((page - 1) * pageSize, page * pageSize),
       total: newData.length,
