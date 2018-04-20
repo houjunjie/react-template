@@ -114,7 +114,7 @@ const AdvertiserLastStep = ({
   }
 
   const handlePreview = (file) => {
-    console.log('handlePreview', file)
+    // console.log('handlePreview', file)
     dispatch({
       type: 'advertiser/updateLastStepState',
       payload: {
@@ -124,7 +124,7 @@ const AdvertiserLastStep = ({
     })
   }
   const handleChange = ({ fileList }) => {
-    console.log('handleChange', fileList)
+    // console.log('handleChange', fileList)
     dispatch({
       type: 'advertiser/updateLastStepState',
       payload: {

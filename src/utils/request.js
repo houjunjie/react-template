@@ -5,13 +5,14 @@ import axios from 'axios'
 import lodash from 'lodash'
 import pathToRegexp from 'path-to-regexp'
 import { message } from 'antd'
+import { getLocalStorage } from './index'
+
 // import { YQL, CORS } from './config'
 
 const fetch = (options) => {
   let {
     method = 'get',
     data,
-    // fetchType,
     url,
   } = options
 
@@ -34,7 +35,13 @@ const fetch = (options) => {
   } catch (e) {
     message.error(e.message)
   }
-
+  const jwt = getLocalStorage('jwt')
+  // // 设置请求头的token
+  if (jwt) {
+    axios.defaults.headers.jwt = jwt
+  } else {
+    // window.location = `${location.origin}/login`
+  }
   switch (method.toLowerCase()) {
     case 'get':
       return axios.get(url, {
@@ -56,11 +63,9 @@ const fetch = (options) => {
 }
 
 export default function request (options) {
-
-
   return fetch(options).then((response) => {
     const { statusText, status } = response
-    let data = response.data
+    let data = options.fetchType === 'YQL' ? response.data.query.results.json : response.data
     if (data instanceof Array) {
       data = {
         list: data,
@@ -79,7 +84,7 @@ export default function request (options) {
     if (response && response instanceof Object) {
       const { data, statusText } = response
       statusCode = response.status
-      msg = data.message || statusText
+      msg = data.tips || statusText
     } else {
       statusCode = 600
       msg = error.message || 'Network Error'

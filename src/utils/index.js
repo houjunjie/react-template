@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash';
 import jwt from 'jsrsasign';
+import { routerRedux } from 'dva/router'
 import permission from '../config/permission';
 
 
@@ -77,17 +78,22 @@ const setLocalStorage = function (key, value, time) {
 }
 const getLocalStorage = function (key) {
   let data = window.localStorage.getItem(key)
+  if (!data) {
+    return null
+  }
   let dataObj = JSON.parse(data)
   if (dataObj.exp && new Date().getTime() > dataObj.exp * 1000) {
     console.log('信息已过期')
     window.localStorage.removeItem(key)
     // alert("信息已过期")
+    // window.location.href = '/login'\
+    routerRedux.push('/login')
     return false
   }
   // console.log("data="+dataObj.data);
   // console.log(JSON.parse(dataObj.data));
-  let dataObjDatatoJson = JSON.parse(dataObj.data)
-  return dataObjDatatoJson
+  // let dataObjDatatoJson = JSON.parse(dataObj.data)
+  return dataObj.data
 }
 
 
