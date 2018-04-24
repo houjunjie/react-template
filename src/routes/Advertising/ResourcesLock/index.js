@@ -27,8 +27,8 @@ class ResourcesLock extends React.PureComponent {
     if(open) return;
     this.setState({
       open: true,
-      leftSpan: 12,
-      rightSpan: 12
+      leftSpan: 16,
+      rightSpan: 8
     })
   }
   closeModal = () => {
@@ -45,6 +45,8 @@ class ResourcesLock extends React.PureComponent {
   }
   render () {
     const { leftSpan, rightSpan, open } = this.state
+    const { resourceslock } = this.props
+    const {ad_plan} = resourceslock
     // const { dispatch, loading } = this.props
     // const modalProp = {
     //   dispatch,
@@ -57,7 +59,7 @@ class ResourcesLock extends React.PureComponent {
         </Row>
         <Row type="flex">
           <Col span={leftSpan}>
-            <RangePicker handleSelect={this.handleSelect}></RangePicker>
+            <RangePicker handleSelect={this.handleSelect} sourceData={ad_plan}></RangePicker>
           </Col>
           <Col span={rightSpan} style={{ paddingLeft: 10 }} className={classnames({
             bounceInDown: open,

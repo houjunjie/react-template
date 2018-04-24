@@ -6,6 +6,13 @@
  */
 
 export default [{
+  id: 'users',
+  pid: '',
+  title: '用户管理',
+  icon: 'user',
+  route: '/users',
+  type: 0,
+}, {
   id: 'ad',
   pid: '',
   title: '广告业务',

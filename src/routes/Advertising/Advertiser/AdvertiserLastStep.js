@@ -104,7 +104,6 @@ const AdvertiserLastStep = ({
 
   // 上传图片的props
   const handleCancel = () => {
-    console.log('3333')
     dispatch({
       type: 'advertiser/updateLastStepState',
       payload: {

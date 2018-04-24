@@ -16,6 +16,10 @@ const routes = [{
     import('./models/advertising/advertiser')],
   component: () => import('./routes/Advertising/')
 }, {
+  path: '/users',
+  models: () => [import('./models/users/userList')],
+  component: () => import('./routes/Users/'),
+},{
   path: '/login',
   models: () => [import('./models/login')],
   component: () => import('./routes/login/'),

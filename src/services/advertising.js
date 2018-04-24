@@ -3,7 +3,7 @@ import config from '../config/index'
 import { getLocalStorage } from 'utils'
 
 const { api } = config
-const { getCityList, songlists, advertisers, stores, getStoreList } = api
+const { getCityList, songlists, advertisers, stores, getStoreList, getDatePlan, getAdTypeList } = api
 
 export function queryCity (data) {
   return request({
@@ -44,7 +44,6 @@ export function addStore (data) {
   })
 }
 export function queryStoreList (data, method) {
-  console.log('method', method)
   const uid = getLocalStorage('user_id')
   return request({
     url: getStoreList.replace(':uid', uid),
@@ -52,11 +51,17 @@ export function queryStoreList (data, method) {
     data,
   })
 }
-export function updateStoreList (data) {
-  const uid = getLocalStorage('user_id')
+export function datePlan (data) {
   return request({
-    url: getStoreList.replace(':uid', uid),
-    method: 'put',
+    url: getDatePlan,
+    method: 'get',
+    data,
+  })
+}
+export function adTypeList (data) {
+  return request({
+    url: getAdTypeList,
+    method: 'get',
     data,
   })
 }

@@ -17,5 +17,7 @@ module.exports = {
     advertisers: `${APIV1}/advertisers`,
     stores: `${APIV2}/store/store`,
     getStoreList: `${APIV1}/ad/user/:uid/targeting`,
+    getDatePlan: `${APIV1}/ad/plan`,
+    getAdTypeList: `${APIV1}/ad/type`,
   },
 }

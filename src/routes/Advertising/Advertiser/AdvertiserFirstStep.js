@@ -39,7 +39,6 @@ const AdvertiserFirstStep = ({
       }
     },
     onChange (page) {
-      console.log(page, 'dddd');
       // dispatch(routerRedux.push({
       //   pathname,
       //   search: queryString.stringify({

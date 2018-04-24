@@ -24,16 +24,13 @@ const {
 } = Layout;
 
 function App({ children, dispatch, app, location, loading }) {
-  // console.log('childrenchildrenchildrenchildren', children)
   const { pathname } = location
   const { breadcrumb } = app
-  // console.log(pathname, openPages, 2222)
   if (openPages && openPages.includes(pathname)) {
     return (<div>
       {children}
     </div>)
   }
-  // console.log('breadcrumb', breadcrumb)
   return (
     <LocaleProvider locale={zhCN}>
       <Layout className={styles.layout}>

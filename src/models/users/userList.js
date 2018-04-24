@@ -4,26 +4,9 @@ import modelExtend from 'dva-model-extend'
 import common from '../common'
 import { queryAdvertisers } from 'services/advertising'
 export default modelExtend(common.pageModel, {
-  namespace: 'advertiser',
+  namespace: 'userList',
   state: {
-    firstStep: true,
-    lastStepData: {
-      list: [],
-      pagination: {
-        showSizeChanger: true,
-        showQuickJumper: true,
-        showTotal: total => `共 ${total} 条数据`,
-        current: 1,
-        total: 0,
-        pageSize: 10,
-      },
-      selectedRowKeys:[],
-      previewVisible: false,
-      previewImage: '',
-      fileList: [],
-      centerVisible: false,
-      centerList: []
-    }
+
   },
   effects: {
     * query ({ payload }, { call, put }) {
@@ -52,15 +35,5 @@ export default modelExtend(common.pageModel, {
         ...payload
       }
     },
-    updateLastStepState(state, {payload}) {
-      const lastStepData = state.lastStepData
-      return {
-        ...state,
-        lastStepData: {
-          ...lastStepData,
-          ...payload
-        }
-      }
-    }
   }
 })

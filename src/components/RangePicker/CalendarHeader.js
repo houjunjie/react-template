@@ -37,12 +37,11 @@ const CalendarHeader = ({
       }
     })
   }
-  console.log(moment().format('M'), 32)
   return (
     <div className={style.headerborder}>
-      <p style={{lineHeight: '60px'}}>{year}-{month}</p>
-      <p className={style.triangleLeft} onClick={handleLeftClick}> </p>
-      <p className={style.triangleRight} onClick={handleRightClick}> </p>
+      <p style={{lineHeight: '60px'}}>{year}</p>
+      {/* <p className={style.triangleLeft} onClick={handleLeftClick}> </p> */}
+      {/* <p className={style.triangleRight} onClick={handleRightClick}> </p> */}
     </div>
   )
 }

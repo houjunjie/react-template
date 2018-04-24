@@ -9,9 +9,7 @@ const Platform = ({
   platform,
   dispatch,
 }) => {
-  console.log('platform', platform)
   const goService = (user) => {
-    console.log(user, 'data')
     dispatch({
       type: 'platform/goService',
       payload: { user },

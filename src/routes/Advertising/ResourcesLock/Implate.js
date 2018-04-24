@@ -13,13 +13,11 @@ const Implate = ({...implateProp}) => {
     modalVisible,
     setSongModalVisible
   } = implateProp;
-  console.log('loading', loading)
   const {
     pagination,
     selectedRowKeys,
     list
   } = advertising
-  console.log('modalVisiblemmm', modalVisible)
   const modalProps = {
     visible: modalVisible,
     maskClosable: false,
@@ -28,7 +26,6 @@ const Implate = ({...implateProp}) => {
     loading,
     warpClassName: 'vertical-center-modal',
     onOk (data) {
-      console.log(data, 'ok')
       setSongModalVisible(false)
     },
     onCancel () {

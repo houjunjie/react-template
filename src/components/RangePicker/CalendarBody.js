@@ -8,42 +8,52 @@ import style from './index.less'
 const CalendarBody = ({
   rangepicker,
   dispatch,
-  handleSelect
+  handleSelect,
+  sourceData
 }) => {
+  if(sourceData.length === 0) return (<div></div>)
   const { year, month, curDay, startDate, endDate, off } = rangepicker
+  const date = sourceData[0].date
   const m = moment(`${year}-${month}`, 'YYYY-MM'),
         daysCount = m.daysInMonth(), // 当前月的天数
-        lastDay = moment(`${year}-${month}`, 'YYYY-MM').subtract(1, 'days'),
+        // lastDay = moment(`${year}-${month}`, 'YYYY-MM').subtract(1, 'days'),
         nextMonthDay = moment(`${year}-${month}-${daysCount}`, 'YYYY-MM-DD').add(1, 'days');
 
-  let lastDays = lastDay.daysInMonth(), // 上一个月的天数
-      firstDayWeek = m.day(); // 当前月第一天是周几
+  // let lastDays = lastDay.daysInMonth() // 上一个月的天数
+      // firstDayWeek = m.day(); // 当前月第一天是周几
   let monthData = [];
   let rowsInMonth = [];
-  //补足上一个月
+  console.log('sourceData', date, sourceData)
+  // 第一天是周几
+  let firstDayWeek = moment(date,'YYYY-MM-DD').day();
+  let lastDay = moment(date, 'YYYY-MM-DD').subtract(1, 'days')
+  console.log('first', firstDayWeek, lastDay.format("MM-DD"))
+  //补足日期
   for (; firstDayWeek > 0; firstDayWeek--) {
-    let day = lastDays--;
-    let date = `${lastDay.format('YYYY')}-${lastDay.format('MM')}-${day < 10 ? '0' + day : day}`
-    const disabled = moment(curDay).unix() > moment(date).unix()
-    monthData.push({
+    // let day = lastDays--;
+    // let date = `${lastDay.format('YYYY')}-${lastDay.format('MM')}-${day < 10 ? '0' + day : day}`
+    let date = lastDay.format("MM-DD")
+    // const disabled = moment(curDay).unix() > moment(date).unix()
+    monthData.unshift({
       classname: classnames({
         [style.lastMonthDay]: true,
-        [style.disabled]: disabled,
-        [style.today]: curDay === date,
-        [style.inRange]: moment(date).unix() >  moment(startDate).unix() && moment(date).unix() <  moment(endDate).unix(),
-        [style.selectedStart]: date === startDate,
-        [style.selectedEnd]: date === endDate
+        [style.disabled]: true,
+        // [style.today]: curDay === date,
+        // [style.inRange]: moment(date).unix() >  moment(startDate).unix() && moment(date).unix() <  moment(endDate).unix(),
+        // [style.selectedStart]: date === startDate,
+        // [style.selectedEnd]: date === endDate
       }),
-      disabled: disabled,
-      day: day,
-      date
+      disabled: true,
+      day: date,
+      date: lastDay.format("YYYY-MM-DD")
     })
+    lastDay = moment(lastDay.format("YYYY-MM-DD"), 'YYYY-MM-DD').subtract(1, 'days')
     // monthData.unshift(lastDays--)
   }
   //加入当前月
-  for (let i = 0; i < daysCount;) {
-    let day = ++i;
-    let date = `${m.format('YYYY')}-${m.format('MM')}-${day < 10 ? '0' + day : day}`
+  // for (let i = 0; i < sourceData;) {
+  sourceData.map((item) => {
+    let date = item.date
     const disabled = moment(curDay).unix() > moment(date).unix()
     monthData.push({
       classname: classnames({
@@ -53,31 +63,34 @@ const CalendarBody = ({
         [style.selectedStart]: date === startDate,
         [style.selectedEnd]: date === endDate
       }),
+      id: item.id,
+      amount: item.amount,
       disabled: disabled,
-      day: day,
+      day: moment(date, 'YYYY-MM-DD').format("MM-DD"),
       date
     })
-  }
+  })
+
   //补足下一个月
-  for (let i = 42 - monthData.length, j = 0; j < i;) {
-    let day = ++j;
-    let date = `${nextMonthDay.format('YYYY')}-${nextMonthDay.format('MM')}-${day < 10 ? '0' + day : day}`;
-    const disabled = moment(curDay).unix() > moment(date).unix()
-    monthData.push({
-      classname: classnames({
-        [style.nextMonthDay]: true,
-        [style.today]: curDay === date,
-        [style.disabled]: disabled ,
-        [style.inRange]: moment(date).unix() >  moment(startDate).unix() && moment(date).unix() <  moment(endDate).unix(),
-        [style.selectedStart]: date === startDate,
-        [style.selectedEnd]: date === endDate
-      }),
-      disabled: disabled,
-      day: day,
-      date
-    })
-    // monthData.push(++j)
-  }
+  // for (let i = 42 - monthData.length, j = 0; j < i;) {
+  //   let day = ++j;
+  //   let date = `${nextMonthDay.format('YYYY')}-${nextMonthDay.format('MM')}-${day < 10 ? '0' + day : day}`;
+  //   const disabled = moment(curDay).unix() > moment(date).unix()
+  //   monthData.push({
+  //     classname: classnames({
+  //       [style.nextMonthDay]: true,
+  //       [style.today]: curDay === date,
+  //       [style.disabled]: disabled ,
+  //       [style.inRange]: moment(date).unix() >  moment(startDate).unix() && moment(date).unix() <  moment(endDate).unix(),
+  //       [style.selectedStart]: date === startDate,
+  //       [style.selectedEnd]: date === endDate
+  //     }),
+  //     disabled: disabled,
+  //     day: day,
+  //     date
+  //   })
+  //   // monthData.push(++j)
+  // }
   //把每一个月的显示数据以7天为一组等分
   monthData.forEach((day, index)=> {
     if (index % 7 === 0) {
@@ -87,7 +100,7 @@ const CalendarBody = ({
 
   const handleMouseEnter = (date, disabled) => {
     if(disabled) return
-    // console.log(date, "date");
+    // .log(date, "date");
     if(!startDate || off) {
       return
     }
@@ -102,7 +115,6 @@ const CalendarBody = ({
     //   startDate: temp ? startDate : date,
     //   endDate: temp ? date : startDate
     // }
-    // console.log(payload, 'payload')
   }
   // 判断后一个日期是否比前一个日期大
   const isEndDateMax = (start, end) => {
@@ -176,7 +188,10 @@ const CalendarBody = ({
                         onMouseEnter={() => handleMouseEnter(item.date, item.disabled)}
                         onClick={() => handleClick(item.date, item.disabled)}
                       >
-                        <div className={style.calendarDate}>{item.day}</div>
+                        <div className={style.calendarDate}>
+                          {item.day}
+                          <div>{item.amount}</div>
+                        </div>
                       </td>
                     )
                   })

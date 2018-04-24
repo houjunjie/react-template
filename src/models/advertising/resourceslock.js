@@ -2,7 +2,8 @@
 // import { tokenVerfy, setLocalStorage } from '../utils'
 import modelExtend from 'dva-model-extend'
 import common from '../common'
-import { queryCity, queryStores, addStore, queryStoreList } from 'services/advertising'
+import { queryCity, queryStores, addStore, queryStoreList, datePlan, adTypeList } from 'services/advertising'
+import { message } from 'antd'
 
 export default modelExtend(common.pageModel, {
   namespace: 'resourceslock',
@@ -22,28 +23,23 @@ export default modelExtend(common.pageModel, {
     selectedStorelist: { // 已选店家列表
       sSelectedRowKeys: [],
       sList: [],
-      // sPagination: {
-      //   showSizeChanger: true,
-      //   showQuickJumper: true,
-      //   showTotal: total => `共 ${total} 条数据`,
-      //   current: 1,
-      //   total: 0,
-      //   pageSize: 10,
-      // }
-    }
-    // list: [],
+    },
+    ad_plan: [], // 广告排期日期
+    adTypeList: [], // 广告形式
   },
   subscriptions: {
     setup ({ dispatch, history }) {
       history.listen(({ pathname }) => {
         if (pathname === '/advertising') {
-          dispatch({ type: 'queryProvinceList', payload:{} })
+          dispatch({ type: 'queryProvinceList', payload: {} })
+          dispatch({ type: 'queryDatePlan', payload: {} })
+          dispatch({ type: 'queryAdTypeList', payload: {} })
         }
       })
     }
   },
   effects: {
-    * queryProvinceList ({ payload }, { call, put }) {
+    * queryProvinceList ({ payload }, { call, put }) { // 获取省
       const data = yield call(queryCity, { ...payload, level_num: 1})
       if (data.success) {
         const { administrative_division } = data.data
@@ -57,7 +53,7 @@ export default modelExtend(common.pageModel, {
         throw data
       }
     },
-    * queryCityList ({ payload }, { call, put }) {
+    * queryCityList ({ payload }, { call, put }) { // 获取市
       const data = yield call(queryCity, payload.query)
       if (data.success) {
         const { administrative_division } = data.data
@@ -72,7 +68,7 @@ export default modelExtend(common.pageModel, {
         throw data
       }
     },
-    * queryAreaList ({ payload }, { call, put }) {
+    * queryAreaList ({ payload }, { call, put }) {// 获取区
       const data = yield call(queryCity, payload.query)
       if (data.success) {
         const { administrative_division } = data.data
@@ -87,17 +83,10 @@ export default modelExtend(common.pageModel, {
         throw data
       }
     },
-    * queryStorelist ({ payload }, { call, put }) {
-      console.log('payloadpayload', payload)
+    * queryStorelist ({ payload }, { call, put }) { // 查看店铺列表
       const data = yield call(queryStores, payload)
       if (data.success) {
         const { info } = data.data
-        // yield put({
-        //   type: 'updateState',
-        //   payload: {
-        //     province: administrative_division
-        //   }
-        // })
         yield put({
           type: 'querySuccess',
           payload: {
@@ -113,54 +102,84 @@ export default modelExtend(common.pageModel, {
         throw data
       }
     },
-    * querySelectedStorelist ({ payload }, { call, put }) {
-      console.log('payloadpayload', payload)
+    * querySelectedStorelist ({ payload }, { call, put }) { // 查看已选店铺列表
       const data = yield call(queryStoreList, payload, {method: "get"})
       if (data.success) {
         const { targeting } = data.data
-        // yield put({
-        //   type: 'updateState',
-        //   payload: {
-        //     province: administrative_division
-        //   }
-        // })
-        console.log('info', targeting)
+        yield put({
+          type: 'updateState',
+          payload: {
+            selectedVisible: true,
+            popoverVisible: false
+          },
+        })
         yield put({
           type: 'updateSelectStoreState',
           payload: {
             sList: targeting.list,
           },
         })
+
       } else {
         throw data
       }
     },
-    * addSelectStore ({ payload }, { call, put }) {
-      const data = yield call(addStore, payload)
+    * putSelectedStorelist ({ payload }, { call, put }) { // 修改已选店铺
+      const data = yield call(queryStoreList, payload, {method: "put"})
       if (data.success) {
-        const { info } = data.data
-        // yield put({
-        //   type: 'updateState',
-        //   payload: {
-        //     province: administrative_division
-        //   }
-        // })
+        message.success('修改成功');
         yield put({
-          type: 'querySuccess',
+          type: 'updateState',
           payload: {
-            list: info.data,
-            pagination: {
-              current: Number(payload.current_page) || 1,
-              pageSize: Number(payload.per_page) || 10,
-              total: info.total,
-            },
+            selectedVisible: false
           },
         })
       } else {
         throw data
       }
     },
-
+    * addSelectStore ({ payload }, { call, put }) { // 添加已选列表
+      const data = yield call(addStore, payload)
+      if (data.success) {
+        message.success('添加成功');
+        yield put({
+          type: 'updateState',
+          payload: {
+            popoverVisible: false
+          },
+        })
+      } else {
+        throw data
+      }
+    },
+    * queryDatePlan ({ payload }, { call, put }) { // 广告排期日期
+      const data = yield call(datePlan, payload)
+      if (data.success) {
+        const { ad_plan } = data.data
+        yield put({
+          type: 'updateState',
+          payload: {
+            ad_plan: ad_plan
+          }
+        })
+      } else {
+        throw data
+      }
+    },
+    * queryAdTypeList ({ payload }, { call, put }) { // 广告排期日期
+      const data = yield call(adTypeList, payload)
+      if (data.success) {
+        const { type } = data.data
+        yield put({
+          type: 'updateState',
+          payload: {
+            adTypeList: type.data
+          }
+        })
+      } else {
+        throw data
+      }
+    },
   },
   reducers: {
     updateState(state, {payload}) {
@@ -171,7 +190,6 @@ export default modelExtend(common.pageModel, {
     },
     updateSelectStoreState(state, { payload }) {
       const selectedStorelist = state.selectedStorelist
-      console.log('payloadpa22222yload',selectedStorelist,'321321', payload)
       return {
         ...state,
         selectedStorelist: {

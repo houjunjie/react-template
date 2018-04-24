@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva'
 import PropTypes from 'prop-types'
-import { Select, TimePicker, Checkbox, Button, Table, Popover } from 'antd';
+import { Select, TimePicker, Checkbox, Button, Table, Popover, Modal } from 'antd';
 import moment from 'moment'
 import { storeType } from 'config'
 import SelectedStoreModal from './SelectedStoreModal'
@@ -20,7 +20,6 @@ class ResourcesFrom extends React.PureComponent {
   constructor(props) {
     super(props)
 
-    // console.log(advertising, 'advertising')
     this.state = {
       province: [],
       city: [],
@@ -148,7 +147,6 @@ class ResourcesFrom extends React.PureComponent {
     const mask_store = list.filter((item) => {
       return selectedRowKeys.indexOf(item.id) === -1
     })
-    console.log(selectedRowKeys, select, province_name, province_code)
     const total = list.length,
           selectTotal = select.length
     dispatch({
@@ -158,12 +156,12 @@ class ResourcesFrom extends React.PureComponent {
           select: selectTotal,
           total: total,
           mask: total - selectTotal,
-          province:province_name,
-          province_code:province_code,
-          city:city_name,
-          city_code:city_code,
-          area:area_name,
-          area_code:area_code,
+          province:province_name || 0,
+          province_code:province_code || 0,
+          city:city_name || 0,
+          city_code:city_code || 0,
+          area:area_name || 0,
+          area_code:area_code || 0,
           select_store: select,
           mask_store: mask_store
         }
@@ -175,16 +173,24 @@ class ResourcesFrom extends React.PureComponent {
       type: 'resourceslock/querySelectedStorelist',
       payload:{}
     })
-    this.props.dispatch({
-      type: 'resourceslock/updateState',
-      payload:{
-        selectedVisible: true,
-        popoverVisible: false
-      }
-    })
+    // this.props.dispatch({
+    //   type: 'resourceslock/updateState',
+    //   payload:{
+    //     selectedVisible: true,
+    //     popoverVisible: false
+    //   }
+    // })
     // this.setState({
     //   firstSetp: value
     // })
+  }
+  handleCancel = () => {
+    this.props.dispatch({
+      type: 'resourceslock/updateState',
+      payload:{
+        popoverVisible: false
+      }
+    })
   }
   render() {
     const { disabled } = this.state
@@ -266,7 +272,6 @@ class ResourcesFrom extends React.PureComponent {
     //   rowSelection: {
     //     selectedRowKeys: sSelectedRowKeys,
     //     onChange: (keys) => {
-    //       console.log('keys', keys)
     //       dispatch({
     //         type: 'resourceslock/updateSelectStoreState',
     //         payload: {
@@ -300,8 +305,8 @@ class ResourcesFrom extends React.PureComponent {
           rowKey={record => record.id}
         />
         <div className="margin-top10">
-          <Button onClick={this.addSelect}>添加已选</Button>
-          <Button className="floatRight" onClick={() => this.openSelectedStore(false)}>已选x家</Button>
+          <Button loading={loading.effects['resourceslock/addSelectStore']} type="primary" onClick={this.addSelect}>添加已选</Button>
+          <Button loading={loading.effects['resourceslock/querySelectedStorelist']} className="floatRight" onClick={() => this.openSelectedStore(false)}>查看已选店家</Button>
         </div>
       </div>
     )
@@ -309,24 +314,32 @@ class ResourcesFrom extends React.PureComponent {
       modalProps: {
         visible: selectedVisible,
         maskClosable: false,
+        width: "70%",
         // confirmLoading: loading.effects['user/update'],
-        title: '已选店家',
+        title: '查看已选店家',
         wrapClassName: 'vertical-center-modal',
         onOk (data) {
-          // dispatch({
-          //   type: 'reportcontent/offShelf',
-          //   payload: {
-          //     // modalVisible: false,
-          //     status: 3,
-          //     ...data,
-          //   },
-          // })
+          dispatch({
+            type: 'resourceslock/putSelectedStorelist',
+            payload: {
+              ...data,
+            },
+          })
           // dispatch({
           //   type: 'reportcontent/updateState',
           //   payload: {
           //     modalVisible: false,
           //   },
           // })
+        },
+        onBack() { //返回上一步
+          dispatch({
+            type: 'resourceslock/updateState',
+            payload:{
+              selectedVisible: false,
+              popoverVisible: true
+            }
+          })
         },
         onCancel () {
           dispatch({
@@ -370,9 +383,9 @@ class ResourcesFrom extends React.PureComponent {
           onSelect={this.onAreaChange}>
           {areaOptions}
         </Select>
-        <Popover visible={popoverVisible} placement="bottomLeft" content={storeContent} trigger="click">
           <Button className="margin-left10" onClick={this.openStoreList}>店家</Button>
-        </Popover>
+        {/* <Popover visible={popoverVisible} placement="bottomLeft" content={storeContent} trigger="click"> */}
+        {/* </Popover> */}
         <span className="margin-left10">时间</span>
         <TimePicker
           className={style.time}
@@ -390,6 +403,16 @@ class ResourcesFrom extends React.PureComponent {
         <Checkbox defaultChecked onChange={this.selectAllDay}>全天</Checkbox>
 
         {selectedVisible && <SelectedStoreModal {...selectedStoreProps} />}
+        {popoverVisible && <Modal
+          title="店家"
+          visible={popoverVisible}
+          width="70%"
+          footer={null}
+          // onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          {storeContent}
+        </Modal>}
       </div>
     )
   }

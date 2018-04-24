@@ -21,7 +21,6 @@ const UploadPic = ({
     </div>
   );
   // const cancel = () => {
-  //   console.log('333222222')
   //   handleCancel()
   // }
   return (
